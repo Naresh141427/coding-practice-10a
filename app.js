@@ -24,6 +24,31 @@ const intializeDbAndServer = async () => {
 
 intializeDbAndServer();
 
+app.post("/login/", async (request, response) => {
+  const { username, password } = request.body;
+  const getQuery = `SELECT
+                    *
+                FROM
+                    user
+                WHERE
+                    username = '${username}';`;
+  const dbUser = await db.get(getQuery);
+  if (dbUser === undefined) {
+    response.status(400);
+    response.send("Invalid User");
+  } else {
+    const isPasswordMatched = bcrypt.compare(password, dbUser.password);
+    if (isPasswordMatched === true) {
+      const payload = { username: username };
+      const jwtToken = jwt.sign(payload, "MY_SECRETE_KEY");
+      response.send(jwtToken);
+    } else {
+      response.status(400);
+      response.send("Invalid password");
+    }
+  }
+});
+
 const authenticateToken = (request, response, next) => {
   let jwtToken;
   const authHeader = request.headers["authorization"];
@@ -45,30 +70,6 @@ const authenticateToken = (request, response, next) => {
     });
   }
 };
-
-app.post("/login/", authenticateToken, async (request, response) => {
-  const { username, password } = request.body;
-  const getQuery = `SELECT
-                    *
-                FROM
-                    user
-                WHERE
-                    username = ${username};`;
-  const dbUser = await db.get(getQuery);
-  if (dbUser === undefined) {
-    response.status(400);
-    response.send("Invalid User");
-  } else {
-    const isPasswordMatched = bcrypt.compare(password, dbUser.password);
-    if (isPasswordMatched === true) {
-      const { jwtToken } = request.jwtToken;
-      response.send({ jwtToken });
-    } else {
-      response.status(400);
-      response.send("Invalid password");
-    }
-  }
-});
 
 app.get("/states/", async (request, response) => {
   const getQuery = `SELECT
