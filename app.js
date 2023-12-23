@@ -56,10 +56,14 @@ const convertArraySnakeToPascal = (array) => {
     for (const key in obj) {
       if (Object.prototype.hasOwnProperty.call(obj, key)) {
         const snakeParts = key.split("_");
-        const pascalKey = snakeParts
-          .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-          .join("");
-        pascalObject[pascalKey] = obj[key];
+        const pascalKey = snakeParts.map((part, i) => {
+          if (i === 0) {
+            return part.toLowerCase();
+          } else {
+            return part.charAt(0).toUpperCase() + part.slice(1);
+          }
+        });
+        pascalObject[pascalKey.join("")] = obj[key];
       }
     }
 
