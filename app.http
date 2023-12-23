@@ -1,20 +1,24 @@
 POST http://localhost:3000/login/
-content-type: application/json
+Content-Type : application/json
 
 {
-    "username" : "christopher_phillips",
-    "password" : "christy@123"
+  "username": "christopher_phillips",
+  "password": "christy@123"
 }
 
-###
-GET http://localhost:3000/states/
 
 ###
-GET http://localhost:3000/states/1/
+
+GET http://localhost:3000/states/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
+
+###
+GET http://localhost:3000/states/8/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
 
 ###
 POST http://localhost:3000/districts/
-content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
 
 {
   "districtName": "Bagalkot",
@@ -25,17 +29,21 @@ content-type: application/json
   "deaths": 8
 }
 
-###
-
-GET http://localhost:3000/districts/1/
 
 ###
 
-DELETE http://localhost:3000/districts/1/
+GET http://localhost:3000/districts/320/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
 
 ###
-PUT  http://localhost:3000/districts/1/
-Content-Type: application/json
+
+DELETE http://localhost:3000/districts/322/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
+
+
+###
+PUT http://localhost:3000/districts/320/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImNocmlzdG9waGVyX3BoaWxsaXBzIiwiaWF0IjoxNzAzMzQ1ODQyfQ.TVpVX-GO7z-v1faA49QxZF7Ssh1qAt2gkr14--7pqlM
 
 {
   "districtName": "Nadia",
@@ -45,6 +53,3 @@ Content-Type: application/json
   "active": 3000,
   "deaths": 104
 }
-
-###
-GET http://localhost:3000/states/1/stats
