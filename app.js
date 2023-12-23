@@ -74,7 +74,7 @@ app.post("/login/", async (request, response) => {
   const dbUser = await db.get(selectUserQuery);
   if (dbUser === undefined) {
     response.status(400);
-    response.send("Invalid User");
+    response.send("Invalid user");
   } else {
     const isPasswordMatched = await bcrypt.compare(password, dbUser.password);
     if (isPasswordMatched === true) {
@@ -84,7 +84,7 @@ app.post("/login/", async (request, response) => {
       const jwtToken = jwt.sign(payload, "MY_SECRET_TOKEN");
       response.send({ jwtToken });
     } else {
-      response.status(400).send("Invalid Password");
+      response.status(400).send("Invalid password");
     }
   }
 });
@@ -94,9 +94,7 @@ app.get("/states/", authenticateToken, async (request, response) => {
             SELECT
               *
             FROM
-             state
-            ORDER BY
-              state_id;`;
+             state;`;
   const statesArray = await db.all(getStatesQuery);
   const modifiedStatesArray = convertArraySnakeToPascal(statesArray);
   response.send(modifiedStatesArray);
@@ -110,10 +108,10 @@ app.get("/states/:stateId/", authenticateToken, async (request, response) => {
         FROM
             state
         WHERE
-            state_id = ${stateId}
+            state_id = ?;
   `;
 
-  const stateData = await db.get(getStateQuery);
+  const stateData = await db.get(getStateQuery, [stateId]);
   const [modifyStateData] = convertArraySnakeToPascal([stateData]);
   response.send(modifyStateData);
 });
@@ -218,3 +216,26 @@ app.put(
     response.send("District Details Updated");
   }
 );
+
+app.get(
+  "/states/:stateId/stats/",
+  authenticateToken,
+  async (request, response) => {
+    const { stateId } = request.params;
+    const getStatsQuery = `
+        SELECT
+            SUM(district.cases) as totalCases,
+            SUM(district.cured) as totalCured,
+            SUM(district.active) as totalActive,
+            SUM(district.deaths) as totalDeaths
+        FROM
+            state INNER JOIN district on state.state_id = district.state_id
+        WHERE
+            state.state_id = ?;
+    `;
+    const stateDetails = await db.get(getStatsQuery, [stateId]);
+    response.send(stateDetails);
+  }
+);
+
+module.exports = app;
